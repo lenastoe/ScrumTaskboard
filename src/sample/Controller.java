@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 public class Controller{
 
     @FXML
+    Button button2;
+
+    @FXML
     Button button1;
 
     @FXML
