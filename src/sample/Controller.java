@@ -9,6 +9,10 @@ public class Controller{
     @FXML
     Button button2;
 
+
+    @FXML
+    Button button3;
+
     @FXML
     Button button1;
 
