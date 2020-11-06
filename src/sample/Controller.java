@@ -9,12 +9,15 @@ public class Controller{
     @FXML
     Button button2;
 
-
     @FXML
     Button button3;
 
     @FXML
     Button button1;
+
+    @FXML
+    Button button7;
+
 
     @FXML
     public void initialize(){
