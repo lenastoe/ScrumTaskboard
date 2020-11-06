@@ -57,6 +57,7 @@
             <Button mnemonicParsing="false" text="Neuer Task" />
             <Button mnemonicParsing="false" text="Task löschen" />
             <Button id="button7" mnemonicParsing="false" text="Button" />
+            <ComboBox prefWidth="150.0" />
          </children>
       </VBox>
    </right>
