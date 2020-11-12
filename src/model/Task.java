@@ -1,21 +1,19 @@
 package model;
 
-import model.priority;
-import model.status;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class task {
+public class Task {
 
     private List<entry> entries;
     private static int id=0;
     private String name;
     private double expEffort;
-    private model.priority priority;
-    private model.status status;
+    private Priority priority;
+    private Status status;
 
-    public task(String name, priority p) {
+    public Task(String name, Priority p) {
         this.id++;
         this.name=name;
         entries= new ArrayList<entry>();

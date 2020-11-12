@@ -1,12 +1,12 @@
 package model;
 
-public class productbacklogitem {
+public class Productbacklogitem {
 
     private static int id = 0;
     private String name;
     private String description;
 
-    public productbacklogitem(String name) {
+    public Productbacklogitem(String name) {
         this.id++;
         this.name=name;
         this.description="";

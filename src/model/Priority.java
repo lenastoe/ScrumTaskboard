@@ -1,5 +1,5 @@
 package model;
 
-public enum priority {
+public enum Priority {
     high, medium, low
 }

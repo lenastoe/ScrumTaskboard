@@ -1,4 +1,4 @@
-package sample;
+package controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("homeScene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("HomeScene.fxml"));
         primaryStage.setTitle("Bad Managing");
         Scene firstScene = new Scene(root);
         primaryStage.setScene(firstScene);

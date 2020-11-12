@@ -1,5 +1,5 @@
 package model;
 
-public enum status {
+public enum Status {
     open, active, done
 }
