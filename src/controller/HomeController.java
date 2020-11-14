@@ -26,19 +26,64 @@ public class HomeController {
     @FXML
     Pane centerPane;
 
+    @FXML
+    Button createTaskboardButton;
+
 
     //wechselt zur TaskboardAnsicht
     public void createTaskboardButtonPushed(ActionEvent e) throws IOException {
-        Parent taskboardViewParent = FXMLLoader.load(getClass().getResource("TaskboardScene.fxml"));
-        Scene taskboardScene = new Scene(taskboardViewParent);
+        //Pop up
+        // create view
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("CreateTaskboardScene.fxml"));
+        DialogPane createTaskboardDialogPane = fxmlLoader.load();
 
-        Taskboard tb = new Taskboard();
+        // set view
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setDialogPane(createTaskboardDialogPane);
+        dialog.setTitle(createTaskboardDialogPane.getHeaderText());
 
-        Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        window.setScene(taskboardScene);
-        window.show();
+        // disable ok-button
+        Node okButton = createTaskboardDialogPane.lookupButton(ButtonType.OK);
+        okButton.setDisable(true);
+
+        // enable ok-button if "title"-textfield not empty
+        TextField textField = (TextField) createTaskboardDialogPane.lookup("#title");
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            okButton.setDisable(newValue.trim().isEmpty());
+        });
+
+        // what happens if ok button pressed
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+        clickedButton.ifPresent(buttonType -> {
+            if(buttonType == ButtonType.OK){
+
+                //saveTitle
+                String s;
+
+                //change to TaskboardScene
+                Parent taskboardViewParent = null;
+                try {
+                    taskboardViewParent = FXMLLoader.load(getClass().getResource("TaskboardScene.fxml"));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                Scene taskboardScene = new Scene(taskboardViewParent);
+
+                Taskboard tb = new Taskboard();
+
+                Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
+                window.setScene(taskboardScene);
+                window.show();
+            }
+
+            if(buttonType == ButtonType.CANCEL){
+                dialog.close();
+            }
+
+        });
     }
-
 
     @FXML
     public void initialize() {
@@ -48,7 +93,6 @@ public class HomeController {
         // Create the custom dialog.
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
-        dialog.setHeaderText("Look, a Custom Login Dialog");
 
         // Set the icon (must be included in the project).
         // dialog.setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));

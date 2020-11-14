@@ -57,6 +57,11 @@ public class TaskboardController {
 
         // what happens if ok button pressed
         Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+        clickedButton.ifPresent(buttonType -> {
+            if(buttonType == ButtonType.OK) ;//dua wos
+
+        });
         if (clickedButton.get() == ButtonType.OK) {
 
         }
