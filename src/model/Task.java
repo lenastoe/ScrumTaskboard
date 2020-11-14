@@ -7,14 +7,17 @@ import java.util.List;
 public class Task {
 
     private List<entry> entries;
-    private static int id = 0;
+    private static int countId = 0;
+    private int id;
     private String name;
     private double expEffort = 0.0;
     private Priority priority;
+
     private Status status;
 
     public Task(String name, Priority p) {
-        this.id++;
+        this.countId++;
+        this.id = countId;
         this.name=name;
         entries= new ArrayList<entry>();
         status = Status.open;
@@ -22,7 +25,7 @@ public class Task {
     }
 
     //getter
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
@@ -32,6 +35,10 @@ public class Task {
 
     public double getExpEffort() {
         return expEffort;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     //setter
