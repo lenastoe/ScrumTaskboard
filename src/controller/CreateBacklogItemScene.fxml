@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane fx:id="createBacklogItemView" headerText="Product Backlog Item anlegen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateBacklogItemController">
+    <header>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="249.0" prefWidth="480.0">
+         <children>
+            <TextField fx:id="bezeichnung" layoutX="30.0" layoutY="28.0" prefHeight="25.0" prefWidth="419.0" />
+            <TextArea layoutX="30.0" layoutY="84.0" prefHeight="161.0" prefWidth="418.0" />
+            <Label layoutX="30.0" layoutY="11.0" text="Bezeichnung:" />
+            <Label layoutX="30.0" layoutY="67.0" text="Beschreibung (optional):" />
+         </children></AnchorPane>
+    </header>
+    <content>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
+    </content>
+   <buttonTypes>
+      <ButtonType fx:constant="OK" />
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
+</DialogPane>

@@ -7,9 +7,9 @@ import java.util.List;
 public class Task {
 
     private List<entry> entries;
-    private static int id=0;
+    private static int id = 0;
     private String name;
-    private double expEffort;
+    private double expEffort = 0.0;
     private Priority priority;
     private Status status;
 
@@ -17,6 +17,8 @@ public class Task {
         this.id++;
         this.name=name;
         entries= new ArrayList<entry>();
+        status = Status.open;
+        priority = p;
     }
 
     //getter

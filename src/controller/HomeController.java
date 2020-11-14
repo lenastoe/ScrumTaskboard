@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import model.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -30,6 +31,8 @@ public class HomeController {
     public void createTaskboardButtonPushed(ActionEvent e) throws IOException {
         Parent taskboardViewParent = FXMLLoader.load(getClass().getResource("TaskboardScene.fxml"));
         Scene taskboardScene = new Scene(taskboardViewParent);
+
+        Taskboard tb = new Taskboard();
 
         Stage window = (Stage) ((Node) e.getSource()).getScene().getWindow();
         window.setScene(taskboardScene);
