@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
@@ -36,6 +39,9 @@ public class TaskboardController extends Controller {
 
     @FXML
     VBox backlogField;
+
+    @FXML
+    ListView<String> backlogList;
 
     @FXML
     VBox open;
@@ -69,20 +75,24 @@ public class TaskboardController extends Controller {
         okButton.setDisable(true);
 
         // enable ok-button if "bezeichnung"-textfield not empty
-        TextField textField = (TextField) createBacklogItemDialogPane.lookup("#bezeichnung");
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+        TextField bezeichnung = (TextField) createBacklogItemDialogPane.lookup("#bezeichnung");
+        bezeichnung.textProperty().addListener((observable, oldValue, newValue) -> {
             okButton.setDisable(newValue.trim().isEmpty());
         });
 
         // what happens if ok button pressed
         Optional<ButtonType> clickedButton = dialog.showAndWait();
 
-        clickedButton.ifPresent(buttonType -> {
-            if(buttonType == ButtonType.OK) ;//dua wos
-
-        });
+//        clickedButton.ifPresent(buttonType -> {
+//            if(buttonType == ButtonType.OK) ;//dua wos
+//
+//        });
         if (clickedButton.get() == ButtonType.OK) {
-
+            TextArea beschreibung = (TextArea) createBacklogItemDialogPane.lookup("#beschreibung");
+            ProductBacklogItem pbi = new ProductBacklogItem(bezeichnung.getText(), beschreibung.getText());
+            getModel().getTaskboard().addProductBacklogItem(pbi);
+            backlogList.getItems().add(pbi.getName());
+            backlogList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
 
     }

@@ -18,8 +18,12 @@ public class Taskboard {
         tasks.add(t);
     }
 
+    public void addProductBacklogItem(ProductBacklogItem pbi) { pbItems.add(pbi); }
+
     public List<Task> getTasks() {
         return tasks;
     }
+
+    public List<ProductBacklogItem> getPbItems() { return pbItems; }
 
 }

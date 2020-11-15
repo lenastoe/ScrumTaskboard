@@ -6,10 +6,10 @@ public class ProductBacklogItem {
     private String name;
     private String description;
 
-    public ProductBacklogItem(String name) {
+    public ProductBacklogItem(String name, String description) {
         this.id++;
-        this.name=name;
-        this.description="";
+        this.name = name;
+        this.description = description;
     }
 
     //getter
@@ -32,5 +32,10 @@ public class ProductBacklogItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
