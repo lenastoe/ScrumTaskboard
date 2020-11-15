@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -27,7 +28,10 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Optional;
+
+import static java.time.LocalDate.*;
 
 public class TaskboardController extends Controller {
 
@@ -51,7 +55,6 @@ public class TaskboardController extends Controller {
 
     @FXML
     VBox done;
-
 
     public void createNewTaskButtonPushed(ActionEvent e) throws IOException {
         backlogField.getChildren().add(new TextField("saldkfjlkjsd"));
@@ -107,7 +110,6 @@ public class TaskboardController extends Controller {
         ButtonType okButtonType = ButtonType.OK;
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
-
         // Create labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -117,12 +119,16 @@ public class TaskboardController extends Controller {
         TextField title = new TextField();
         title.setPromptText("Bezeichnung");
         TextField expEffort = new TextField();
-        expEffort.setPromptText("Geschätzer Aufwand");
+        expEffort.setPromptText("Geschätzter Aufwand");
+        TextField priority = new TextField();
+        priority.setPromptText("low, medium or high");
 
         grid.add(new Label("Bezeichnung:"), 0, 0);
         grid.add(title, 1, 0);
-        grid.add(new Label("Geschätzer Aufwand:"), 0, 1);
+        grid.add(new Label("Geschätzter Aufwand:"), 0, 1);
         grid.add(expEffort, 1, 1);
+        grid.add(new Label("Priorität:"), 0, 2);
+        grid.add(priority, 1, 2 );
 
         dialog.getDialogPane().setContent(grid);
 
@@ -142,7 +148,17 @@ public class TaskboardController extends Controller {
 
         clickedButton.ifPresent(buttonType -> {
             if(buttonType == ButtonType.OK){
-                Task task = new Task(title.getText(), Priority.low);
+
+                Task task = new Task(title.getText(), Priority.notSet);
+                if (priority.getText().equalsIgnoreCase("low")) {
+                    task.setPriority(Priority.low);
+                } else if (priority.getText().equalsIgnoreCase("medium")) {
+                    task.setPriority(Priority.medium);
+                } else if (priority.getText().equalsIgnoreCase("high")) {
+                    task.setPriority(Priority.high);
+                } else {
+                    task.setPriority(Priority.notSet);
+                }
                 getModel().getTaskboard().addTask(task);
                 drawAllTasks();
             }
@@ -166,11 +182,24 @@ public class TaskboardController extends Controller {
     public void drawTask(Task task){
         Label id = new Label(Integer.toString(task.getId()));
         Label title = new Label(task.getName());
+        Label priority = new Label(task.getPriority().toString());
         id.setStyle("-fx-label-padding: 5px");
         title.setStyle("-fx-label-padding: 5px");
         HBox box = new HBox();
 
-        box.setStyle("-fx-background-color: white");
+        if (priority.getText().equalsIgnoreCase("low")) {
+            task.setPriority(Priority.low);
+            box.setStyle("-fx-background-color: green");
+        } else if (priority.getText().equalsIgnoreCase("medium")) {
+            task.setPriority(Priority.medium);
+            box.setStyle("-fx-background-color: yellow");
+        } else if (priority.getText().equalsIgnoreCase("high")) {
+            task.setPriority(Priority.high);
+            box.setStyle("-fx-background-color: red");
+        } else {
+            box.setStyle("-fx-background-color: white");
+        }
+
         box.getChildren().add(id);
         box.getChildren().add(title);
         VBox.setMargin(box,new Insets(0,0,20,20));
@@ -182,6 +211,72 @@ public class TaskboardController extends Controller {
         }else if(task.getStatus() == Status.done){
             done.getChildren().add(box);
         }
+    }
+
+    // opens a dialog to edit Task
+    public void editTaskButtonPushed(ActionEvent e) throws IOException {
+        Dialog<ButtonType> dialog2 = new Dialog<>();
+        dialog2.setTitle("Bestehenden Task ändern");
+
+        // Set the button types.
+        ButtonType okButtonType = ButtonType.OK;
+        dialog2.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        // Create labels and fields.
+        GridPane grid2 = new GridPane();
+        grid2.setHgap(10);
+        grid2.setVgap(10);
+        grid2.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField title = new TextField();
+        title.setPromptText("Bezeichnung");
+        TextField expEffort = new TextField();
+        expEffort.setPromptText("Geschätzter Aufwand");
+        TextField priority = new TextField();
+        priority.setPromptText("low, medium or high");
+        DatePicker date = new DatePicker(LocalDate.of(2020, 11, 15));
+        TextField name = new TextField();
+        name.setPromptText("Vor- und Nachname");
+        TextField hoursPerDay = new TextField();
+        hoursPerDay.setPromptText("Stunden pro Tag");
+        TextField cumulativeEffort = new TextField();
+        cumulativeEffort.setPromptText("kumulierter Gesamtaufwand");
+        TextField reamingEffort = new TextField();
+        reamingEffort.setPromptText("geschätzter Restaufwand");
+        TextField status = new TextField();
+        status.setPromptText("Offen, aktiv oder erledigt");
+
+        grid2.add(new Label("Bezeichnung:"), 0, 0);
+        grid2.add(title, 1, 0);
+        grid2.add(new Label("Geschätzer Aufwand:"), 0, 1);
+        grid2.add(expEffort, 1, 1);
+        grid2.add(new Label("Priorität:"), 0, 2);
+        grid2.add(priority, 1, 2 );
+        grid2.add(new Label("Datum:"), 0, 3);
+        grid2.add(date, 1, 3);
+        grid2.add(new Label("Vor- und Nachname:"), 0, 4);
+        grid2.add(name, 1, 4);
+        grid2.add(new Label("Stunden pro Tag:"), 0, 5);
+        grid2.add(hoursPerDay, 1, 5);
+        grid2.add(new Label("Kumulierter Gesamtaufwand:"), 0, 6);
+        grid2.add(cumulativeEffort, 1, 6);
+        grid2.add(new Label("Geschätzter Restaufwand:"), 0, 7);
+        grid2.add(reamingEffort, 1, 7);
+        grid2.add(new Label("Status:"), 0, 8);
+        grid2.add(status, 1, 8);
+
+        dialog2.getDialogPane().setContent(grid2);
+
+        Optional<ButtonType> clickedButton = dialog2.showAndWait();
+
+        clickedButton.ifPresent(buttonType -> {
+            if(buttonType == ButtonType.OK){
+                //noch offen
+            }
+            if(buttonType == ButtonType.CANCEL){
+                dialog2.close();
+            }
+        });
     }
 
     @FXML

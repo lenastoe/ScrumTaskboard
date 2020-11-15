@@ -35,7 +35,7 @@
                   <Menu mnemonicParsing="false" text="Ändern">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Product Backlog Item" />
-                        <MenuItem mnemonicParsing="false" text="Task" />
+                        <MenuItem mnemonicParsing="false" onAction="#editTaskButtonPushed" text="Task" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Löschen">
@@ -59,11 +59,11 @@
    <left>
       <VBox prefHeight="200.0" prefWidth="256.0" BorderPane.alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Backlog Items">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Backlog Items" textAlignment="CENTER" wrappingWidth="255.1611328125">
                <font>
                   <Font size="14.0" />
                </font></Text>
-            <ListView fx:id="backlogList" prefHeight="699.0" prefWidth="549.0" />
+            <ListView fx:id="backlogList" prefHeight="681.0" prefWidth="256.0" />
          </children>
       </VBox>
    </left>
@@ -72,7 +72,7 @@
          <children>
             <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="256.0">
                <children>
-                  <Label alignment="CENTER" layoutY="-1.0" prefHeight="24.0" prefWidth="202.0" text="OFFEN">
+                  <Label alignment="CENTER" layoutX="-1.0" layoutY="14.0" prefHeight="26.0" prefWidth="257.0" text="OFFEN" textAlignment="CENTER">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -82,7 +82,7 @@
             </AnchorPane>
             <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="256.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="24.0" prefWidth="200.0" text="AKTIV">
+                  <Label alignment="CENTER" layoutY="14.0" prefHeight="26.0" prefWidth="256.0" text="AKTIV" textAlignment="CENTER">
                      <font>
                         <Font size="16.0" />
                      </font></Label>
@@ -91,7 +91,7 @@
             </AnchorPane>
             <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="256.0">
                <children>
-                  <Label alignment="CENTER" prefHeight="28.0" prefWidth="256.0" text="ERLEDIGT">
+                  <Label alignment="CENTER" layoutY="14.0" prefHeight="28.0" prefWidth="256.0" text="ERLEDIGT" textAlignment="CENTER">
                      <font>
                         <Font size="16.0" />
                      </font>

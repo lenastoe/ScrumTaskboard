@@ -12,7 +12,6 @@ public class Task {
     private String name;
     private double expEffort = 0.0;
     private Priority priority;
-
     private Status status;
 
     public Task(String name, Priority p) {
@@ -41,6 +40,8 @@ public class Task {
         return status;
     }
 
+    public Priority getPriority() { return priority; }
+
     //setter
     public void setName(String name) {
         this.name = name;
@@ -48,6 +49,10 @@ public class Task {
 
     public void setExpEffort(double expEffort) {
         this.expEffort = expEffort;
+    }
+
+    public void setPriority(Priority p) {
+        this.priority = p;
     }
 
     //list-functions (add, edit)
