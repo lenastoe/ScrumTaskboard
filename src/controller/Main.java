@@ -15,6 +15,7 @@ public class Main extends Application {
         Scene firstScene = new Scene(root);
         primaryStage.setScene(firstScene);
         primaryStage.show();
+
     }
 
 

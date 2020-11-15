@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateTaskboardController {
+public class CreateTaskboardController extends Controller {
 
     @FXML
     public TextField title;

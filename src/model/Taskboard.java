@@ -5,9 +5,21 @@ import java.util.List;
 
 public class Taskboard {
 
-    public static String title;
+    private String title;
 
-    public static List<Task> tasks = new ArrayList<>();
-    public static List<ProductBacklogItem> pbItems = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
+    private List<ProductBacklogItem> pbItems = new ArrayList<>();
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void addTask(Task t) {
+        tasks.add(t);
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
 
 }

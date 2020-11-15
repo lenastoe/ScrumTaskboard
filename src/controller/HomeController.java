@@ -18,7 +18,7 @@ import model.*;
 import java.io.IOException;
 import java.util.Optional;
 
-public class HomeController {
+public class HomeController extends Controller {
 
     @FXML
     Pane titlePane;

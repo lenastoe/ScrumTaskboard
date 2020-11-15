@@ -26,7 +26,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Optional;
 
-public class TaskboardController {
+public class TaskboardController extends Controller {
 
     @FXML
     Button createNewTaskButton;
@@ -51,7 +51,8 @@ public class TaskboardController {
         backlogField.getChildren().add(new TextField("saldkfjlkjsd"));
     }
 
-    // opens a textfield to enter a name for a new backlog item
+    // opens a dialog to enter a name for a new backlog item
+    // by josef
     public void createBacklogItemButtonPushed(ActionEvent e) throws IOException  {
         // create view
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -132,7 +133,7 @@ public class TaskboardController {
         clickedButton.ifPresent(buttonType -> {
             if(buttonType == ButtonType.OK){
                 Task task = new Task(title.getText(), Priority.low);
-                Taskboard.tasks.add(task);
+                getModel().getTaskboard().addTask(task);
                 drawAllTasks();
             }
             if(buttonType == ButtonType.CANCEL){
@@ -146,7 +147,7 @@ public class TaskboardController {
         open.getChildren().clear();
         active.getChildren().clear();
         done.getChildren().clear();
-        for(Task task : Taskboard.tasks){
+        for(Task task : getModel().getTaskboard().getTasks()){
             drawTask(task);
         }
     }
