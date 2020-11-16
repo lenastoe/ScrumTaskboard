@@ -35,6 +35,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.time.LocalDate.*;
@@ -47,12 +48,7 @@ public class TaskboardController extends Controller {
     MenuItem createBacklogItemButton;
 
     @FXML
-    MenuItem changeBacklogItemButton;
-
-    @FXML
-    MenuItem deleteBacklogItemButton;
-
-//    ------------------------------------
+    MenuItem createTaskButton;
 
     @FXML
     ListView<ProductBacklogItem> backlogList;
@@ -160,7 +156,7 @@ public class TaskboardController extends Controller {
                 } else {
                     task.setPriority(Priority.notSet);
                 }
-                getModel().getTaskboard().addTask(task);
+                getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).addTask(task);
                 drawAllTasks();
             }
             if(buttonType == ButtonType.CANCEL){
@@ -174,9 +170,10 @@ public class TaskboardController extends Controller {
         open.getChildren().clear();
         active.getChildren().clear();
         done.getChildren().clear();
-        for(Task task : getModel().getTaskboard().getTasks()){
+        for(Task task : getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).getTasks()) {
             drawTask(task);
         }
+
     }
 
     //show new Task
@@ -283,13 +280,14 @@ public class TaskboardController extends Controller {
     @FXML
     public void initialize() {
         initializeBacklogItemHandling();
+        createTaskButton.setVisible(false);
     }
 
     private void initializeBacklogItemHandling() {
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem item1 = new MenuItem("ändern");
-        item1.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem change = new MenuItem("ändern");
+        change.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
@@ -337,8 +335,8 @@ public class TaskboardController extends Controller {
 
             }
         });
-        MenuItem item2 = new MenuItem("löschen");
-        item2.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem delete = new MenuItem("löschen");
+        delete.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
@@ -352,7 +350,7 @@ public class TaskboardController extends Controller {
                 }
             }
         });
-        contextMenu.getItems().addAll(item1, item2);
+        contextMenu.getItems().addAll(change, delete);
 
         backlogList.setContextMenu(contextMenu);
         backlogList.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -369,7 +367,11 @@ public class TaskboardController extends Controller {
         backlogListSelectionModel.selectedItemProperty().addListener(new ChangeListener<ProductBacklogItem>() {
             @Override
             public void changed(ObservableValue<? extends ProductBacklogItem> observableValue, ProductBacklogItem productBacklogItem, ProductBacklogItem t1) {
-
+                if (t1 == null) createTaskButton.setVisible(false);
+                else {
+                    createTaskButton.setVisible(true);
+                    drawAllTasks();
+                }
             }
 
         });

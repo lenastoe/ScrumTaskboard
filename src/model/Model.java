@@ -8,7 +8,7 @@ public class Model {
     // if we decide providing more than 1 taskboard
 //     private List<Taskboard> taskBoards = new ArrayList<>();
 
-    private Taskboard tb = new Taskboard();
+    private static Taskboard tb = new Taskboard();
 
     // if we decide providing more than 1 taskboard
 //     public void addTaskboard(Taskboard tb) {
@@ -20,9 +20,9 @@ public class Model {
 //        return taskBoards;
 //    }
 
-    public void setTaskboard(Taskboard tb) {
-        this.tb = tb;
-    }
+//    public void setTaskboard(Taskboard tb) {
+//        this.tb = tb;
+//    }
 
     public Taskboard getTaskboard() {
         return tb;

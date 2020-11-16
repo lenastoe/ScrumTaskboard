@@ -1,11 +1,15 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductBacklogItem {
 
     private static int ongoingID = 0;
     private String name;
     private String description;
     private int id;
+    private ArrayList<Task> tasks = new ArrayList<>();
 
     public ProductBacklogItem(String name, String description) {
         id = ongoingID;
@@ -35,6 +39,10 @@ public class ProductBacklogItem {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void addTask(Task t) { tasks.add(t); }
+
+    public ArrayList<Task> getTasks() { return tasks; }
 
     @Override
     public String toString() {

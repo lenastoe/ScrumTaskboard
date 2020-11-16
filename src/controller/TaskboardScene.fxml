@@ -29,18 +29,16 @@
                   <Menu mnemonicParsing="false" text="Neu anlegen">
                     <items>
                       <MenuItem fx:id="createBacklogItemButton" mnemonicParsing="false" onAction="#createBacklogItemButtonPushed" text="Product Backlog Item" />
-                        <MenuItem mnemonicParsing="false" onAction="#createTaskButtonPushed" text="Task" />
+                        <MenuItem fx:id="createTaskButton" mnemonicParsing="false" onAction="#createTaskButtonPushed" text="Task" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Ändern">
                     <items>
-                      <MenuItem fx:id="changeBacklogItemButton" mnemonicParsing="false" text="Product Backlog Item" />
                         <MenuItem mnemonicParsing="false" onAction="#editTaskButtonPushed" text="Task" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Löschen">
                     <items>
-                      <MenuItem fx:id="deleteBacklogItemButton" mnemonicParsing="false" text="Product Backlog Item" />
                         <MenuItem mnemonicParsing="false" text="Task" />
                     </items>
                   </Menu>
