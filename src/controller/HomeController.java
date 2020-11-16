@@ -48,8 +48,8 @@ public class HomeController extends Controller {
         okButton.setDisable(true);
 
         // enable ok-button if "title"-textfield not empty
-        TextField textField = (TextField) createTaskboardDialogPane.lookup("#title");
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+        TextField title = (TextField) createTaskboardDialogPane.lookup("#title");
+        title.textProperty().addListener((observable, oldValue, newValue) -> {
             okButton.setDisable(newValue.trim().isEmpty());
         });
 
@@ -60,7 +60,8 @@ public class HomeController extends Controller {
             if(buttonType == ButtonType.OK){
 
                 //saveTitle
-                String s;
+                String s = title.getText();
+                getModel().getTaskboard().setTitle(s);
 
                 //change to TaskboardScene
                 Parent taskboardViewParent = null;

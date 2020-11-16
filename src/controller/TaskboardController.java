@@ -28,6 +28,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.*;
@@ -59,14 +60,27 @@ public class TaskboardController extends Controller {
 
     @FXML
     VBox open;
-
     @FXML
     VBox active;
-
     @FXML
     VBox done;
 
+    @FXML
+    Label offen;
+    @FXML
+    Label aktiv;
+    @FXML
+    Label erledigt;
+
+    @FXML
+    Label tasks;
+    @FXML
+    Label pbi;
+
     HBox selectedTask;
+
+    @FXML
+    Label title;
 
     // opens a dialog to enter a name for a new backlog item
     // by josef
@@ -207,7 +221,7 @@ public class TaskboardController extends Controller {
 
         box.getChildren().add(id);
         box.getChildren().add(title);
-        VBox.setMargin(box,new Insets(0,0,20,20));
+        VBox.setMargin(box,new Insets(20,20,0,20));
 
         if(task.getStatus() == Status.open){
             open.getChildren().add(box);
@@ -354,6 +368,13 @@ public class TaskboardController extends Controller {
     public void initialize() {
         initializeBacklogItemHandling();
         createTaskButton.setVisible(false);
+        title.setText(getModel().getTaskboard().getTitle());
+        title.setStyle("-fx-background-color: #0B243B");
+        offen.setStyle("-fx-background-color: #F0EBE8");
+        aktiv.setStyle("-fx-background-color: #F0EBE8");
+        erledigt.setStyle("-fx-background-color: #F0EBE8");
+        tasks.setStyle("-fx-background-color: #d7d7d7");
+        pbi.setStyle("-fx-background-color: #d7d7d7");
     }
 
     // by josef

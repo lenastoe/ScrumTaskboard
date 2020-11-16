@@ -13,6 +13,10 @@ public class Taskboard {
 
     public String getTitle() { return title; }
 
+    public void setTitle(String s){
+        this.title = s;
+    }
+
     public void addProductBacklogItem(ProductBacklogItem pbi) { pbItems.add(pbi); }
 
     public ArrayList<ProductBacklogItem> getPbItems() { return pbItems; }

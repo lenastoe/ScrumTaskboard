@@ -21,9 +21,6 @@ import java.util.List;
 public class CreateTaskboardController extends Controller {
 
     @FXML
-    public TextField title;
-
-    @FXML
     ChoiceBox departments;
 
     ObservableList<Object> dep = FXCollections.observableArrayList();
