@@ -92,40 +92,13 @@ public class TaskboardController extends Controller {
         // what happens if ok button pressed
         Optional<ButtonType> clickedButton = dialog.showAndWait();
 
-//        clickedButton.ifPresent(buttonType -> {
-//            if(buttonType == ButtonType.OK) ;//dua wos
-//
-//        });
         if (clickedButton.get() == ButtonType.OK) {
             TextArea beschreibung = (TextArea) createBacklogItemDialogPane.lookup("#beschreibung");
             ProductBacklogItem pbi = new ProductBacklogItem(bezeichnung.getText(), beschreibung.getText());
             getModel().getTaskboard().addProductBacklogItem(pbi);
             String s = pbi.getName();
             backlogList.getItems().add(pbi);
-
-            ContextMenu contextMenu = new ContextMenu();
-
-            MenuItem item1 = new MenuItem("Menu Item 1");
-            item1.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("Select Menu Item 1");
-                }
-            });
-            MenuItem item2 = new MenuItem("Menu Item 2");
-            item2.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("Select Menu Item 2");
-                }
-            });
-            contextMenu.getItems().addAll(item1, item2);
-
-
         }
-
     }
 
     // opens a dialog to create a new Task
@@ -309,9 +282,10 @@ public class TaskboardController extends Controller {
 
     @FXML
     public void initialize() {
+        initializeBacklogItemHandling();
+    }
 
-
-
+    private void initializeBacklogItemHandling() {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem item1 = new MenuItem("ändern");
@@ -320,8 +294,47 @@ public class TaskboardController extends Controller {
             @Override
             public void handle(ActionEvent event) {
                 // handle ändern
-                if (backlogList.getSelectionModel().getSelectedItem() == null) System.out.println("null");
-                System.out.println("Select Menu Item 1");
+                if (backlogList.getSelectionModel().getSelectedItem() != null) {
+                    // create view
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("CreateBacklogItemScene.fxml"));
+                    DialogPane changeBacklogItemDialogPane = null;
+                    try {
+                        changeBacklogItemDialogPane = fxmlLoader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // set view
+                    Dialog<ButtonType> dialog = new Dialog<>();
+                    dialog.setDialogPane(changeBacklogItemDialogPane);
+                    dialog.setTitle("Product Backlog Item ändern");
+
+                    // disable ok-button
+                    Node okButton = changeBacklogItemDialogPane.lookupButton(ButtonType.OK);
+
+                    // enable ok-button if "bezeichnung"-textfield not empty
+                    TextField bezeichnung = (TextField) changeBacklogItemDialogPane.lookup("#bezeichnung");
+                    bezeichnung.textProperty().addListener((observable, oldValue, newValue) -> {
+                        okButton.setDisable(newValue.trim().isEmpty());
+                    });
+
+                    // set text to selectedBacklogItemText
+                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
+                    TextArea beschreibung = (TextArea) changeBacklogItemDialogPane.lookup("#beschreibung");
+                    bezeichnung.setText(pbi.getName());
+                    beschreibung.setText(pbi.getDescription());
+
+                    // what happens if ok button pressed
+                    Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+                    if (clickedButton.get() == ButtonType.OK) {
+                        pbi.setName(bezeichnung.getText());
+                        pbi.setDescription(beschreibung.getText());
+                        backlogList.refresh();
+                    }
+                }
+
             }
         });
         MenuItem item2 = new MenuItem("löschen");
@@ -359,8 +372,7 @@ public class TaskboardController extends Controller {
 
             }
 
-         });
-
+        });
     }
 
 
