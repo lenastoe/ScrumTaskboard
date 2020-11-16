@@ -40,9 +40,18 @@ public class ProductBacklogItem {
         this.name = name;
     }
 
+    public ArrayList<Task> getTasks() { return tasks; }
+
+    //
     public void addTask(Task t) { tasks.add(t); }
 
-    public ArrayList<Task> getTasks() { return tasks; }
+    public void deleteTask(int taskID) {
+        int i = 0;
+        for(Task t : tasks) {
+            if (id == taskID) { tasks.remove(i); }
+            i++;
+        }
+    }
 
     @Override
     public String toString() {

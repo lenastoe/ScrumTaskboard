@@ -21,6 +21,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
@@ -54,6 +55,9 @@ public class TaskboardController extends Controller {
     ListView<ProductBacklogItem> backlogList;
 
     @FXML
+    HBox taskBox;
+
+    @FXML
     VBox open;
 
     @FXML
@@ -61,6 +65,8 @@ public class TaskboardController extends Controller {
 
     @FXML
     VBox done;
+
+    HBox selectedTask;
 
     // opens a dialog to enter a name for a new backlog item
     // by josef
@@ -85,9 +91,10 @@ public class TaskboardController extends Controller {
             okButton.setDisable(newValue.trim().isEmpty());
         });
 
-        // what happens if ok button pressed
+        // show dialog
         Optional<ButtonType> clickedButton = dialog.showAndWait();
 
+        // what happens if ok button pressed
         if (clickedButton.get() == ButtonType.OK) {
             TextArea beschreibung = (TextArea) createBacklogItemDialogPane.lookup("#beschreibung");
             ProductBacklogItem pbi = new ProductBacklogItem(bezeichnung.getText(), beschreibung.getText());
@@ -209,6 +216,72 @@ public class TaskboardController extends Controller {
         }else if(task.getStatus() == Status.done){
             done.getChildren().add(box);
         }
+
+        // by josef
+//        box.hoverProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+//                System.out.println("something changed");
+//            }
+//        });
+
+        //context menu
+        ContextMenu contextMenu = new ContextMenu();
+
+        // handling to change task
+        MenuItem change = new MenuItem("ändern");
+        change.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+
+        // handling to delete task
+        MenuItem delete = new MenuItem("löschen");
+        change.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent actionEvent) {
+//                if (selectedTask != null) {
+//                    Label l = (Label) selectedTask.getChildren().get(0);
+//                    selectedTask = null;
+//                    getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId())
+//                        .deleteTask(Integer.parseInt(l.getId()));
+////                    backlogList.getSelectionModel().getSelectedItem().deleteTask(Integer.parseInt(l.getId()));
+//                    System.out.println("ggdasdg");
+
+
+//                    int i = backlogList.getSelectionModel().getSelectedIndex();
+//                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
+//                    backlogList.getSelectionModel().clearSelection();
+//                    backlogList.getItems().remove(i);
+//                    getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
+//                }
+            }
+        });
+
+        contextMenu.getItems().addAll(change, delete);
+        box.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent contextMenuEvent) {
+                contextMenu.show(box, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+                contextMenuEvent.consume();
+            }
+        });
+
+        // select task and border it
+        box.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            if (e.getButton().name().equals("PRIMARY") || e.getButton().name().equals("SECONDARY")) {
+                if (selectedTask != null) selectedTask.setEffect(null);
+                selectedTask = box;
+                Label l = (Label) box.getChildren().get(0);
+                box.setEffect(new DropShadow());
+                return;
+            }
+        });
+
     }
 
     // opens a dialog to edit Task
@@ -283,15 +356,16 @@ public class TaskboardController extends Controller {
         createTaskButton.setVisible(false);
     }
 
+    // by josef
     private void initializeBacklogItemHandling() {
         ContextMenu contextMenu = new ContextMenu();
 
+        // handling to change backlog item
         MenuItem change = new MenuItem("ändern");
         change.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                // handle ändern
                 if (backlogList.getSelectionModel().getSelectedItem() != null) {
                     // create view
                     FXMLLoader fxmlLoader = new FXMLLoader();
@@ -335,12 +409,13 @@ public class TaskboardController extends Controller {
 
             }
         });
+
+        // handling to delete backlog item
         MenuItem delete = new MenuItem("löschen");
         delete.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                //handle löschen
                 if (backlogList.getSelectionModel().getSelectedItem() != null) {
                     int i = backlogList.getSelectionModel().getSelectedIndex();
                     ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
@@ -363,6 +438,7 @@ public class TaskboardController extends Controller {
 
         });
 
+        // make createTaskButton visible only if backlogItem is selected
         SelectionModel<ProductBacklogItem> backlogListSelectionModel = backlogList.getSelectionModel();
         backlogListSelectionModel.selectedItemProperty().addListener(new ChangeListener<ProductBacklogItem>() {
             @Override
