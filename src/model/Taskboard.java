@@ -26,4 +26,15 @@ public class Taskboard {
 
     public List<ProductBacklogItem> getPbItems() { return pbItems; }
 
+    public void removeProductBacklogItem(int id) {
+        int i = 0;
+        for (ProductBacklogItem pbi : pbItems) {
+            if (pbi.getId() == id) {
+                pbItems.remove(i);
+                return;
+            }
+            i++;
+        }
+    }
+
 }

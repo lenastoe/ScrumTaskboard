@@ -34,13 +34,13 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Ändern">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Product Backlog Item" />
+                      <MenuItem fx:id="changeBacklogItemButton" mnemonicParsing="false" text="Product Backlog Item" />
                         <MenuItem mnemonicParsing="false" onAction="#editTaskButtonPushed" text="Task" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Löschen">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Product Backlog Item" />
+                      <MenuItem fx:id="deleteBacklogItemButton" mnemonicParsing="false" text="Product Backlog Item" />
                         <MenuItem mnemonicParsing="false" text="Task" />
                     </items>
                   </Menu>

@@ -2,12 +2,14 @@ package model;
 
 public class ProductBacklogItem {
 
-    private static int id = 0;
+    private static int ongoingID = 0;
     private String name;
     private String description;
+    private int id;
 
     public ProductBacklogItem(String name, String description) {
-        this.id++;
+        id = ongoingID;
+        ongoingID++;
         this.name = name;
         this.description = description;
     }
@@ -21,7 +23,7 @@ public class ProductBacklogItem {
         return name;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
@@ -36,6 +38,8 @@ public class ProductBacklogItem {
 
     @Override
     public String toString() {
-        return name;
+        String s = "id: " + id + "\n" + name;
+        if (!description.equals("")) s += "\n" + "beschreibung: " + description;
+        return s;
     }
 }

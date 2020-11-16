@@ -1,8 +1,12 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -17,6 +21,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -35,17 +41,21 @@ import static java.time.LocalDate.*;
 
 public class TaskboardController extends Controller {
 
-    @FXML
-    Button createNewTaskButton;
+//    buttons backlogItem
 
     @FXML
     MenuItem createBacklogItemButton;
 
     @FXML
-    VBox backlogField;
+    MenuItem changeBacklogItemButton;
 
     @FXML
-    ListView<String> backlogList;
+    MenuItem deleteBacklogItemButton;
+
+//    ------------------------------------
+
+    @FXML
+    ListView<ProductBacklogItem> backlogList;
 
     @FXML
     VBox open;
@@ -55,10 +65,6 @@ public class TaskboardController extends Controller {
 
     @FXML
     VBox done;
-
-    public void createNewTaskButtonPushed(ActionEvent e) throws IOException {
-        backlogField.getChildren().add(new TextField("saldkfjlkjsd"));
-    }
 
     // opens a dialog to enter a name for a new backlog item
     // by josef
@@ -94,8 +100,30 @@ public class TaskboardController extends Controller {
             TextArea beschreibung = (TextArea) createBacklogItemDialogPane.lookup("#beschreibung");
             ProductBacklogItem pbi = new ProductBacklogItem(bezeichnung.getText(), beschreibung.getText());
             getModel().getTaskboard().addProductBacklogItem(pbi);
-            backlogList.getItems().add(pbi.getName());
-            backlogList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            String s = pbi.getName();
+            backlogList.getItems().add(pbi);
+
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem item1 = new MenuItem("Menu Item 1");
+            item1.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("Select Menu Item 1");
+                }
+            });
+            MenuItem item2 = new MenuItem("Menu Item 2");
+            item2.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("Select Menu Item 2");
+                }
+            });
+            contextMenu.getItems().addAll(item1, item2);
+
+
         }
 
     }
@@ -281,6 +309,57 @@ public class TaskboardController extends Controller {
 
     @FXML
     public void initialize() {
+
+
+
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem item1 = new MenuItem("ändern");
+        item1.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                // handle ändern
+                if (backlogList.getSelectionModel().getSelectedItem() == null) System.out.println("null");
+                System.out.println("Select Menu Item 1");
+            }
+        });
+        MenuItem item2 = new MenuItem("löschen");
+        item2.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                //handle löschen
+                if (backlogList.getSelectionModel().getSelectedItem() != null) {
+                    int i = backlogList.getSelectionModel().getSelectedIndex();
+                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
+                    backlogList.getSelectionModel().clearSelection();
+                    backlogList.getItems().remove(i);
+                    getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
+                }
+            }
+        });
+        contextMenu.getItems().addAll(item1, item2);
+
+        backlogList.setContextMenu(contextMenu);
+        backlogList.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextMenu.show(backlogList, event.getScreenX(), event.getScreenY());
+                event.consume();
+            }
+
+        });
+
+        SelectionModel<ProductBacklogItem> backlogListSelectionModel = backlogList.getSelectionModel();
+        backlogListSelectionModel.selectedItemProperty().addListener(new ChangeListener<ProductBacklogItem>() {
+            @Override
+            public void changed(ObservableValue<? extends ProductBacklogItem> observableValue, ProductBacklogItem productBacklogItem, ProductBacklogItem t1) {
+
+            }
+
+         });
 
     }
 
