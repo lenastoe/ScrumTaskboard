@@ -5,15 +5,14 @@ import java.util.List;
 
 public class ProductBacklogItem {
 
-    private static int ongoingID = 0;
+    private static int ongoingID = 1;
     private String name;
     private String description;
     private int id;
     private ArrayList<Task> tasks = new ArrayList<>();
 
     public ProductBacklogItem(String name, String description) {
-        id = ongoingID;
-        ongoingID++;
+        id = ongoingID++;
         this.name = name;
         this.description = description;
     }
@@ -48,9 +47,16 @@ public class ProductBacklogItem {
     public void deleteTask(int taskID) {
         int i = 0;
         for(Task t : tasks) {
-            if (id == taskID) { tasks.remove(i); }
+            if (t.getId() == taskID) {
+                tasks.remove(i);
+                return;
+            }
             i++;
         }
+    }
+
+    public void clearTasks(){
+        tasks.clear();
     }
 
     public Task searchTask(int taskID) {

@@ -253,7 +253,63 @@ public class TaskboardController extends Controller {
             }
         });
 
+        MenuItem setEntry = new MenuItem("eintragen");
+        setEntry.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Dialog<ButtonType> dialog2 = new Dialog<>();
+                dialog2.setTitle("Neuen Eintrag machen");
+
+                // Set the button types.
+                ButtonType okButtonType = ButtonType.OK;
+                dialog2.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+                // Create labels and fields.
+                GridPane grid2 = new GridPane();
+                grid2.setHgap(10);
+                grid2.setVgap(10);
+                grid2.setPadding(new Insets(20, 150, 10, 10));
+
+                DatePicker date = new DatePicker(of(2020, 11, 15));
+                TextField name = new TextField();
+                name.setPromptText("Vor- und Nachname");
+                TextField hoursPerDay = new TextField();
+                hoursPerDay.setPromptText("Stunden pro Tag");
+                TextField cumulativeEffort = new TextField();
+                cumulativeEffort.setPromptText("kumulierter Gesamtaufwand");
+                TextField reamingEffort = new TextField();
+                reamingEffort.setPromptText("geschätzter Restaufwand");
+
+                grid2.add(new Label("Datum:"), 0, 3);
+                grid2.add(date, 1, 3);
+                grid2.add(new Label("Vor- und Nachname:"), 0, 4);
+                grid2.add(name, 1, 4);
+                grid2.add(new Label("Stunden pro Tag:"), 0, 5);
+                grid2.add(hoursPerDay, 1, 5);
+                grid2.add(new Label("Kumulierter Gesamtaufwand:"), 0, 6);
+                grid2.add(cumulativeEffort, 1, 6);
+                grid2.add(new Label("Geschätzter Restaufwand:"), 0, 7);
+                grid2.add(reamingEffort, 1, 7);
+
+                dialog2.getDialogPane().setContent(grid2);
+
+                Optional<ButtonType> clickedButton = dialog2.showAndWait();
+
+                clickedButton.ifPresent(buttonType -> {
+                    if(buttonType == ButtonType.OK){
+                        Label l = (Label) selectedTask.getChildren().get(0);
+
+                        Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(Integer.parseInt(l.getId()));
+
+
+                    }
+                    if(buttonType == ButtonType.CANCEL){
+                        dialog2.close();
+                    }
+                });
+            }
+        });
 
         // handling to change task
         MenuItem change = new MenuItem("ändern");
@@ -261,31 +317,87 @@ public class TaskboardController extends Controller {
 
             @Override
             public void handle(ActionEvent actionEvent) {
+                Dialog<ButtonType> dialog2 = new Dialog<>();
+                dialog2.setTitle("Bestehenden Task ändern");
 
+                // Set the button types.
+                ButtonType okButtonType = ButtonType.OK;
+                dialog2.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+                // Create labels and fields.
+                GridPane grid2 = new GridPane();
+                grid2.setHgap(10);
+                grid2.setVgap(10);
+                grid2.setPadding(new Insets(20, 150, 10, 10));
+
+                TextField title = new TextField();
+                title.setPromptText("Bezeichnung");
+                TextField expEffort = new TextField();
+                expEffort.setPromptText("Geschätzter Aufwand");
+                TextField priority = new TextField();
+                priority.setPromptText("low, medium or high");
+                ChoiceBox status = new ChoiceBox();
+                ObservableList<Object> stat = FXCollections.observableArrayList();
+                stat.add("offen");
+                stat.add("aktiv");
+                stat.add("erledigt");
+                status.setItems(stat);
+
+                grid2.add(new Label("Bezeichnung:"), 0, 0);
+                grid2.add(title, 1, 0);
+                grid2.add(new Label("Geschätzer Aufwand:"), 0, 1);
+                grid2.add(expEffort, 1, 1);
+                grid2.add(new Label("Priorität:"), 0, 2);
+                grid2.add(priority, 1, 2 );
+                grid2.add(new Label("Status:"), 0, 8);
+                grid2.add(status, 1, 8);
+
+                dialog2.getDialogPane().setContent(grid2);
+
+                Optional<ButtonType> clickedButton = dialog2.showAndWait();
+
+                clickedButton.ifPresent(buttonType -> {
+                    if(buttonType == ButtonType.OK){
+                        Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(task.getId());
+
+                        //setTitle
+                        if(!title.getText().equals("")){
+                            t.setName(title.getText());
+                        }
+                        //setEffort
+                        if(!expEffort.getText().equals("")){
+                            t.setExpEffort(Integer.parseInt(expEffort.getText()));
+                        }
+                        //setPriority
+                        if(!priority.getText().equals("")){
+                            t.setPriority(Priority.valueOf(priority.getText()));
+                        }
+                        //setStatus
+                        if(status.isShowing()){
+                            t.setStatus((Status) status.getSelectionModel().getSelectedItem());
+                        }
+
+                        drawAllTasks();
+
+                    }
+                    if(buttonType == ButtonType.CANCEL){
+                        dialog2.close();
+                    }
+                });
             }
         });
 
         // handling to delete task
         MenuItem delete = new MenuItem("löschen");
-        change.setOnAction(new EventHandler<ActionEvent>() {
+        delete.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent actionEvent) {
-//                if (selectedTask != null) {
-//                    Label l = (Label) selectedTask.getChildren().get(0);
-//                    selectedTask = null;
-//                    getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId())
-//                        .deleteTask(Integer.parseInt(l.getId()));
-////                    backlogList.getSelectionModel().getSelectedItem().deleteTask(Integer.parseInt(l.getId()));
-//                    System.out.println("ggdasdg");
-
-
-//                    int i = backlogList.getSelectionModel().getSelectedIndex();
-//                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
-//                    backlogList.getSelectionModel().clearSelection();
-//                    backlogList.getItems().remove(i);
-//                    getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
-//                }
+                if (selectedTask != null) {
+                    getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).deleteTask(task.getId());
+                    selectedTask = null;
+                    drawAllTasks();
+                }
             }
         });
 
@@ -300,7 +412,6 @@ public class TaskboardController extends Controller {
 
         // select task and border it
         box.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
-            System.out.println("Hallo");
             if (e.getButton().name().equals("PRIMARY") || e.getButton().name().equals("SECONDARY")) {
                 if (selectedTask != null) selectedTask.setEffect(null);
                 selectedTask = box;
@@ -310,77 +421,6 @@ public class TaskboardController extends Controller {
             }
         });
 
-    }
-
-    // opens a dialog to edit Task
-    public void editTaskButtonPushed(ActionEvent e) throws IOException {
-        Dialog<ButtonType> dialog2 = new Dialog<>();
-        dialog2.setTitle("Bestehenden Task ändern");
-
-        // Set the button types.
-        ButtonType okButtonType = ButtonType.OK;
-        dialog2.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
-
-        // Create labels and fields.
-        GridPane grid2 = new GridPane();
-        grid2.setHgap(10);
-        grid2.setVgap(10);
-        grid2.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField title = new TextField();
-        title.setPromptText("Bezeichnung");
-        TextField expEffort = new TextField();
-        expEffort.setPromptText("Geschätzter Aufwand");
-        TextField priority = new TextField();
-        priority.setPromptText("low, medium or high");
-        DatePicker date = new DatePicker(of(2020, 11, 15));
-        TextField name = new TextField();
-        name.setPromptText("Vor- und Nachname");
-        TextField hoursPerDay = new TextField();
-        hoursPerDay.setPromptText("Stunden pro Tag");
-        TextField cumulativeEffort = new TextField();
-        cumulativeEffort.setPromptText("kumulierter Gesamtaufwand");
-        TextField reamingEffort = new TextField();
-        reamingEffort.setPromptText("geschätzter Restaufwand");
-        TextField status = new TextField();
-        status.setPromptText("offen, aktiv oder erledigt");
-
-        grid2.add(new Label("Bezeichnung:"), 0, 0);
-        grid2.add(title, 1, 0);
-        grid2.add(new Label("Geschätzer Aufwand:"), 0, 1);
-        grid2.add(expEffort, 1, 1);
-        grid2.add(new Label("Priorität:"), 0, 2);
-        grid2.add(priority, 1, 2 );
-        grid2.add(new Label("Datum:"), 0, 3);
-        grid2.add(date, 1, 3);
-        grid2.add(new Label("Vor- und Nachname:"), 0, 4);
-        grid2.add(name, 1, 4);
-        grid2.add(new Label("Stunden pro Tag:"), 0, 5);
-        grid2.add(hoursPerDay, 1, 5);
-        grid2.add(new Label("Kumulierter Gesamtaufwand:"), 0, 6);
-        grid2.add(cumulativeEffort, 1, 6);
-        grid2.add(new Label("Geschätzter Restaufwand:"), 0, 7);
-        grid2.add(reamingEffort, 1, 7);
-        grid2.add(new Label("Status:"), 0, 8);
-        grid2.add(status, 1, 8);
-
-        dialog2.getDialogPane().setContent(grid2);
-
-        Optional<ButtonType> clickedButton = dialog2.showAndWait();
-
-        clickedButton.ifPresent(buttonType -> {
-            if(buttonType == ButtonType.OK){
-                Label l = (Label) selectedTask.getChildren().get(0);
-                //setTitle
-                Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(Integer.parseInt(l.getId()));
-                t.setName(title.getText());
-                //setEffort
-
-            }
-            if(buttonType == ButtonType.CANCEL){
-                dialog2.close();
-            }
-        });
     }
 
     @FXML
@@ -460,7 +500,9 @@ public class TaskboardController extends Controller {
                     ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
                     backlogList.getSelectionModel().clearSelection();
                     backlogList.getItems().remove(i);
+                    getModel().getTaskboard().getPbItem(i).clearTasks();
                     getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
+                    drawAllTasks();
                 }
             }
         });

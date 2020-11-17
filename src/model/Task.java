@@ -55,6 +55,10 @@ public class Task {
         this.priority = p;
     }
 
+    public void setStatus(Status s){
+        this.status = s;
+    }
+
     //list-functions (add, edit)
 
     public List<entry> getList() {
