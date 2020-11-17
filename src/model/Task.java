@@ -66,8 +66,6 @@ public class Task {
         entries.add(e);
     }
 
-
-
     //inner class entry (table entries)
     public class entry{
         private LocalDate date;

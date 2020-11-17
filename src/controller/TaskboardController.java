@@ -77,6 +77,7 @@ public class TaskboardController extends Controller {
     @FXML
     Label pbi;
 
+    @FXML
     HBox selectedTask;
 
     @FXML
@@ -242,6 +243,18 @@ public class TaskboardController extends Controller {
         //context menu
         ContextMenu contextMenu = new ContextMenu();
 
+        //handling to show the details of the task
+        MenuItem showDetails = new MenuItem("anzeigen");
+        showDetails.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+
+
+
         // handling to change task
         MenuItem change = new MenuItem("ändern");
         change.setOnAction(new EventHandler<ActionEvent>() {
@@ -287,6 +300,7 @@ public class TaskboardController extends Controller {
 
         // select task and border it
         box.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> {
+            System.out.println("Hallo");
             if (e.getButton().name().equals("PRIMARY") || e.getButton().name().equals("SECONDARY")) {
                 if (selectedTask != null) selectedTask.setEffect(null);
                 selectedTask = box;
@@ -319,7 +333,7 @@ public class TaskboardController extends Controller {
         expEffort.setPromptText("Geschätzter Aufwand");
         TextField priority = new TextField();
         priority.setPromptText("low, medium or high");
-        DatePicker date = new DatePicker(LocalDate.of(2020, 11, 15));
+        DatePicker date = new DatePicker(of(2020, 11, 15));
         TextField name = new TextField();
         name.setPromptText("Vor- und Nachname");
         TextField hoursPerDay = new TextField();
@@ -329,7 +343,7 @@ public class TaskboardController extends Controller {
         TextField reamingEffort = new TextField();
         reamingEffort.setPromptText("geschätzter Restaufwand");
         TextField status = new TextField();
-        status.setPromptText("Offen, aktiv oder erledigt");
+        status.setPromptText("offen, aktiv oder erledigt");
 
         grid2.add(new Label("Bezeichnung:"), 0, 0);
         grid2.add(title, 1, 0);
@@ -356,7 +370,9 @@ public class TaskboardController extends Controller {
 
         clickedButton.ifPresent(buttonType -> {
             if(buttonType == ButtonType.OK){
-                //noch offen
+                Label l = (Label) selectedTask.getChildren().get(0);
+                Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(Integer.parseInt(l.getId()));
+                t.setName(title.getText());
             }
             if(buttonType == ButtonType.CANCEL){
                 dialog2.close();

@@ -53,10 +53,20 @@ public class ProductBacklogItem {
         }
     }
 
+    public Task searchTask(int taskID) {
+            for (Task newTask : tasks) {
+                if (newTask.getId() == taskID) {
+                    return newTask;
+                }
+            }
+        return null;
+    }
+
+
     @Override
     public String toString() {
         String s = "id: " + id + "\n" + name;
-        if (!description.equals("")) s += "\n" + "beschreibung: " + description;
+        if (!description.equals("")) s += "\n" + "Beschreibung: " + description;
         return s;
     }
 }
