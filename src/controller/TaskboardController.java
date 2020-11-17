@@ -371,8 +371,11 @@ public class TaskboardController extends Controller {
         clickedButton.ifPresent(buttonType -> {
             if(buttonType == ButtonType.OK){
                 Label l = (Label) selectedTask.getChildren().get(0);
+                //setTitle
                 Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(Integer.parseInt(l.getId()));
                 t.setName(title.getText());
+                //setEffort
+
             }
             if(buttonType == ButtonType.CANCEL){
                 dialog2.close();
@@ -389,7 +392,6 @@ public class TaskboardController extends Controller {
         offen.setStyle("-fx-background-color: #F0EBE8");
         aktiv.setStyle("-fx-background-color: #F0EBE8");
         erledigt.setStyle("-fx-background-color: #F0EBE8");
-        tasks.setStyle("-fx-background-color: #d7d7d7");
         pbi.setStyle("-fx-background-color: #d7d7d7");
     }
 

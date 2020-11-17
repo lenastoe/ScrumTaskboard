@@ -63,11 +63,6 @@
                         <Font size="16.0" />
                      </font></Label>
                   <VBox fx:id="active" layoutX="1.0" layoutY="65.0" prefHeight="665.0" prefWidth="256.0" />
-                  <Label fx:id="tasks" alignment="CENTER" layoutX="-257.0" layoutY="10.0" prefHeight="19.0" prefWidth="771.0" text="Tasks">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
                </children>
             </AnchorPane>
             <AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="256.0">
