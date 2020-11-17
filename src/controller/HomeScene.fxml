@@ -9,7 +9,6 @@
       <Pane fx:id="centerPane" layoutY="83.0" prefHeight="317.0" prefWidth="612.0" AnchorPane.topAnchor="83.0">
          <children>
             <Button id="createTaskboardButton" fx:id="createTaskboardButton" layoutX="218.0" layoutY="145.0" mnemonicParsing="false" onAction="#createTaskboardButtonPushed" text="Neues Taskboard erstellen" />
-            <Button layoutX="218.0" layoutY="182.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="156.0" text="Taskboard importieren" />
          </children></Pane>
       <Pane id="titlePane" fx:id="titlePane" layoutY="1.0" prefHeight="84.0" prefWidth="612.0">
          <children>
