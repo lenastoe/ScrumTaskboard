@@ -397,6 +397,7 @@ public class TaskboardController extends Controller {
                     getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).deleteTask(task.getId());
                     selectedTask = null;
                     drawAllTasks();
+
                 }
             }
         });
