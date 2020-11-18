@@ -5,16 +5,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.DatePicker;
@@ -24,20 +20,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Pair;
 import model.*;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.time.LocalDate.*;
@@ -178,7 +166,7 @@ public class TaskboardController extends Controller {
                 } else {
                     task.setPriority(Priority.notSet);
                 }
-                getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).addTask(task);
+                getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).addTask(task);
                 drawAllTasks();
             }
             if(buttonType == ButtonType.CANCEL){
@@ -195,7 +183,6 @@ public class TaskboardController extends Controller {
         for(Task task : getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).getTasks()) {
             drawTask(task);
         }
-
     }
 
     //show new Task
@@ -224,11 +211,11 @@ public class TaskboardController extends Controller {
         box.getChildren().add(title);
         VBox.setMargin(box,new Insets(20,20,0,20));
 
-        if(task.getStatus() == Status.open){
+        if(task.getStatus() == Status.offen){
             open.getChildren().add(box);
-        }else if(task.getStatus() == Status.active){
+        }else if(task.getStatus() == Status.aktiv){
             active.getChildren().add(box);
-        }else if(task.getStatus() == Status.done){
+        }else if(task.getStatus() == Status.erledigt){
             done.getChildren().add(box);
         }
 
@@ -300,7 +287,7 @@ public class TaskboardController extends Controller {
                     if(buttonType == ButtonType.OK){
                         Label l = (Label) selectedTask.getChildren().get(0);
 
-                        Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(Integer.parseInt(l.getId()));
+                        Task t = getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).searchTask(Integer.parseInt(l.getId()));
 
 
                     }
@@ -338,9 +325,9 @@ public class TaskboardController extends Controller {
                 priority.setPromptText("low, medium or high");
                 ChoiceBox status = new ChoiceBox();
                 ObservableList<Object> stat = FXCollections.observableArrayList();
-                stat.add("offen");
-                stat.add("aktiv");
-                stat.add("erledigt");
+                stat.add(Status.offen);
+                stat.add(Status.aktiv);
+                stat.add(Status.erledigt);
                 status.setItems(stat);
 
                 grid2.add(new Label("Bezeichnung:"), 0, 0);
@@ -358,7 +345,7 @@ public class TaskboardController extends Controller {
 
                 clickedButton.ifPresent(buttonType -> {
                     if(buttonType == ButtonType.OK){
-                        Task t = getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).searchTask(task.getId());
+                        Task t = getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).searchTask(task.getId());
 
                         //setTitle
                         if(!title.getText().equals("")){
@@ -373,7 +360,7 @@ public class TaskboardController extends Controller {
                             t.setPriority(Priority.valueOf(priority.getText()));
                         }
                         //setStatus
-                        if(status.isShowing()){
+                        if(status.getSelectionModel().getSelectedItem() != null){
                             t.setStatus((Status) status.getSelectionModel().getSelectedItem());
                         }
 
@@ -394,7 +381,7 @@ public class TaskboardController extends Controller {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (selectedTask != null) {
-                    getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).deleteTask(task.getId());
+                    getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).deleteTask(task.getId());
                     selectedTask = null;
                     drawAllTasks();
 
@@ -446,7 +433,7 @@ public class TaskboardController extends Controller {
 
             @Override
             public void handle(ActionEvent event) {
-                if (backlogList.getSelectionModel().getSelectedItem() != null) {
+                if (getSelectedBacklogItem() != null) {
                     // create view
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("CreateBacklogItemScene.fxml"));
@@ -472,7 +459,7 @@ public class TaskboardController extends Controller {
                     });
 
                     // set text to selectedBacklogItemText
-                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
+                    ProductBacklogItem pbi = getSelectedBacklogItem();
                     TextArea beschreibung = (TextArea) changeBacklogItemDialogPane.lookup("#beschreibung");
                     bezeichnung.setText(pbi.getName());
                     beschreibung.setText(pbi.getDescription());
@@ -496,9 +483,9 @@ public class TaskboardController extends Controller {
 
             @Override
             public void handle(ActionEvent event) {
-                if (backlogList.getSelectionModel().getSelectedItem() != null) {
+                if (getSelectedBacklogItem() != null) {
                     int i = backlogList.getSelectionModel().getSelectedIndex();
-                    ProductBacklogItem pbi = backlogList.getSelectionModel().getSelectedItem();
+                    ProductBacklogItem pbi = getSelectedBacklogItem();
                     backlogList.getSelectionModel().clearSelection();
                     backlogList.getItems().remove(i);
                     getModel().getTaskboard().getPbItem(i).clearTasks();
@@ -535,5 +522,8 @@ public class TaskboardController extends Controller {
         });
     }
 
+    private ProductBacklogItem getSelectedBacklogItem() {
+        return backlogList.getSelectionModel().getSelectedItem();
+    }
 
 }

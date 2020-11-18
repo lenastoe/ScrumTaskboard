@@ -1,5 +1,5 @@
 package model;
 
 public enum Status {
-    open, active, done
+    offen, aktiv, erledigt
 }

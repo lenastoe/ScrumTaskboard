@@ -19,7 +19,7 @@ public class Task {
         this.id = countId;
         this.name=name;
         entries= new ArrayList<entry>();
-        status = Status.open;
+        status = Status.offen;
         priority = p;
     }
 
