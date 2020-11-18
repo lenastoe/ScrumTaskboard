@@ -127,8 +127,13 @@ public class TaskboardController extends Controller {
         title.setPromptText("Bezeichnung");
         TextField expEffort = new TextField();
         expEffort.setPromptText("Geschätzter Aufwand");
-        TextField priority = new TextField();
-        priority.setPromptText("low, medium or high");
+        ChoiceBox priority = new ChoiceBox();
+        ObservableList<Object> prio = FXCollections.observableArrayList();
+        prio.add(Priority.NOTSET.getGerman());
+        prio.add(Priority.LOW.getGerman());
+        prio.add(Priority.MEDIUM.getGerman());
+        prio.add(Priority.HIGH.getGerman());
+        priority.setItems(prio);
 
         grid.add(new Label("Bezeichnung:"), 0, 0);
         grid.add(title, 1, 0);
@@ -156,16 +161,21 @@ public class TaskboardController extends Controller {
         clickedButton.ifPresent(buttonType -> {
             if(buttonType == ButtonType.OK){
 
-                Task task = new Task(title.getText(), Priority.notSet);
-                if (priority.getText().equalsIgnoreCase("low")) {
-                    task.setPriority(Priority.low);
-                } else if (priority.getText().equalsIgnoreCase("medium")) {
-                    task.setPriority(Priority.medium);
-                } else if (priority.getText().equalsIgnoreCase("high")) {
-                    task.setPriority(Priority.high);
-                } else {
-                    task.setPriority(Priority.notSet);
+                Task task = new Task(title.getText(), Priority.NOTSET);
+
+                //setPriority
+                if(priority.getSelectionModel().getSelectedItem() != null) {
+                    task.setPriority(Priority.getPriority((String) priority.getSelectionModel().getSelectedItem()));
                 }
+//                if (priority.getText().equalsIgnoreCase("low")) {
+//                    task.setPriority(Priority.LOW);
+//                } else if (priority.getText().equalsIgnoreCase("medium")) {
+//                    task.setPriority(Priority.MEDIUM);
+//                } else if (priority.getText().equalsIgnoreCase("high")) {
+//                    task.setPriority(Priority.HIGH);
+//                } else {
+//                    task.setPriority(Priority.NOTSET);
+//                }
                 getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).addTask(task);
                 drawAllTasks();
             }
@@ -180,8 +190,10 @@ public class TaskboardController extends Controller {
         open.getChildren().clear();
         active.getChildren().clear();
         done.getChildren().clear();
-        for(Task task : getModel().getTaskboard().getPbItem(backlogList.getSelectionModel().getSelectedItem().getId()).getTasks()) {
-            drawTask(task);
+        if (getSelectedBacklogItem() != null) {
+            for(Task task : getModel().getTaskboard().getPbItem(getSelectedBacklogItem().getId()).getTasks()) {
+                drawTask(task);
+            }
         }
     }
 
@@ -195,13 +207,13 @@ public class TaskboardController extends Controller {
         HBox box = new HBox();
 
         if (priority.getText().equalsIgnoreCase("low")) {
-            task.setPriority(Priority.low);
+            task.setPriority(Priority.LOW);
             box.setStyle("-fx-background-color: green");
         } else if (priority.getText().equalsIgnoreCase("medium")) {
-            task.setPriority(Priority.medium);
+            task.setPriority(Priority.MEDIUM);
             box.setStyle("-fx-background-color: yellow");
         } else if (priority.getText().equalsIgnoreCase("high")) {
-            task.setPriority(Priority.high);
+            task.setPriority(Priority.HIGH);
             box.setStyle("-fx-background-color: red");
         } else {
             box.setStyle("-fx-background-color: white");
@@ -321,8 +333,17 @@ public class TaskboardController extends Controller {
                 title.setPromptText("Bezeichnung");
                 TextField expEffort = new TextField();
                 expEffort.setPromptText("Geschätzter Aufwand");
-                TextField priority = new TextField();
-                priority.setPromptText("low, medium or high");
+//                TextField priority = new TextField();
+//                priority.setPromptText("low, medium or high");
+
+                ChoiceBox priority = new ChoiceBox();
+                ObservableList<Object> prio = FXCollections.observableArrayList();
+                prio.add(Priority.NOTSET.getGerman());
+                prio.add(Priority.LOW.getGerman());
+                prio.add(Priority.MEDIUM.getGerman());
+                prio.add(Priority.HIGH.getGerman());
+                priority.setItems(prio);
+
                 ChoiceBox status = new ChoiceBox();
                 ObservableList<Object> stat = FXCollections.observableArrayList();
                 stat.add(Status.offen);
@@ -356,8 +377,8 @@ public class TaskboardController extends Controller {
                             t.setExpEffort(Integer.parseInt(expEffort.getText()));
                         }
                         //setPriority
-                        if(!priority.getText().equals("")){
-                            t.setPriority(Priority.valueOf(priority.getText()));
+                        if(priority.getSelectionModel().getSelectedItem() != null) {
+                            t.setPriority(Priority.getPriority((String) priority.getSelectionModel().getSelectedItem()));
                         }
                         //setStatus
                         if(status.getSelectionModel().getSelectedItem() != null){
@@ -488,8 +509,10 @@ public class TaskboardController extends Controller {
                     ProductBacklogItem pbi = getSelectedBacklogItem();
                     backlogList.getSelectionModel().clearSelection();
                     backlogList.getItems().remove(i);
-                    getModel().getTaskboard().getPbItem(i).clearTasks();
-                    getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
+                    if (getModel().getTaskboard().getPbItem(i) != null) {
+                        getModel().getTaskboard().getPbItem(i).clearTasks();
+                        getModel().getTaskboard().removeProductBacklogItem(pbi.getId());
+                    }
                     drawAllTasks();
                 }
             }

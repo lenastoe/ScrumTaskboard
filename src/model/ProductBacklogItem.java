@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ProductBacklogItem {
 
-    private static int ongoingID = 1;
+    private static int ongoingID = 0;
     private String name;
     private String description;
     private int id;
